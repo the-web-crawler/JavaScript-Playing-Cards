@@ -119,7 +119,3 @@ const cards = {
         if (card.constructor === Object) {return returnValue[0]} else {return returnValue} ;
     },
 };
-
-// cards.shuffle(cards.makeDeck(true)).forEach(card => {
-//     document.write(cards.svg(card));
-// });
