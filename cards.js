@@ -1,4 +1,6 @@
 const cards = {
+    ranks: ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "JOKER"],
+    aceHighRanks: ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "JOKER"],
     makeDeck: function(jokers) {
         let deck = [{r:"A",s:"H",c:"red"},{r:"2",s:"H",c:"red"},{r:"3",s:"H",c:"red"},{r:"4",s:"H",c:"red"},{r:"5",s:"H",c:"red"},{r:"6",s:"H",c:"red"},{r:"7",s:"H",c:"red"},{r:"8",s:"H",c:"red"},{r:"9",s:"H",c:"red"},{r:"10",s:"H",c:"red"},{r:"J",s:"H",c:"red"},{r:"Q",s:"H",c:"red"},{r:"K",s:"H",c:"red"},{r:"A",s:"D",c:"red"},{r:"2",s:"D",c:"red"},{r:"3",s:"D",c:"red"},{r:"4",s:"D",c:"red"},{r:"5",s:"D",c:"red"},{r:"6",s:"D",c:"red"},{r:"7",s:"D",c:"red"},{r:"8",s:"D",c:"red"},{r:"9",s:"D",c:"red"},{r:"10",s:"D",c:"red"},{r:"J",s:"D",c:"red"},{r:"Q",s:"D",c:"red"},{r:"K",s:"D",c:"red"},{r:"A",s:"C",c:"black"},{r:"2",s:"C",c:"black"},{r:"3",s:"C",c:"black"},{r:"4",s:"C",c:"black"},{r:"5",s:"C",c:"black"},{r:"6",s:"C",c:"black"},{r:"7",s:"C",c:"black"},{r:"8",s:"C",c:"black"},{r:"9",s:"C",c:"black"},{r:"10",s:"C",c:"black"},{r:"J",s:"C",c:"black"},{r:"Q",s:"C",c:"black"},{r:"K",s:"C",c:"black"},{r:"A",s:"S",c:"black"},{r:"2",s:"S",c:"black"},{r:"3",s:"S",c:"black"},{r:"4",s:"S",c:"black"},{r:"5",s:"S",c:"black"},{r:"6",s:"S",c:"black"},{r:"7",s:"S",c:"black"},{r:"8",s:"S",c:"black"},{r:"9",s:"S",c:"black"},{r:"10",s:"S",c:"black"},{r:"J",s:"S",c:"black"},{r:"Q",s:"S",c:"black"},{r:"K",s:"S",c:"black"}];
         if (jokers) deck = deck.concat([{r:"JOKER", c:"red"}, {r:"JOKER", c:"black"}]);
@@ -22,7 +24,7 @@ const cards = {
         return returnValue;
     },
     deal: function(deck, players, amount="imperfect") {
-        if (Number(amount) <= Math.ceil(deck.length/players)) {
+        if (isNaN(Number(amount)) || (amount <= Math.ceil(deck.length/players))) {
             if (amount === "imperfect") amount = Math.ceil(deck.length/players);
             if (amount === "perfect") amount = Math.floor(deck.length/players);
         }else {
@@ -48,13 +50,18 @@ const cards = {
         return returnValue;
     },
     numeric: function(rank, aceHigh=true) {
-        rank = rank.toUpperCase().replaceAll("JOKER", "15").replaceAll("J", "11").replaceAll("Q", "12").replaceAll("K", "13");
         if (aceHigh) {
-            rank = rank.replaceAll("A", "14");
+            return this.aceHighRanks.indexOf(rank) + 2;
         }else {
-            rank = rank.replaceAll("A", "1");
+            return this.ranks.indexOf(rank) + 1;
         };
-        return Number(rank);
+    },
+    unNumeric: function(rank, aceHigh=true) {
+        if (aceHigh) {
+            return this.aceHighRanks[rank - 2];
+        }else {
+            return this.ranks[rank - 1];
+        };
     },
     repair: function(card) {
         let returnValue = [];
@@ -81,41 +88,89 @@ const cards = {
         };
         if (card.constructor === Object) {return returnValue[0]} else {return returnValue}; 
     },
-    svg: function(card) {
+    char: function(card, entity=true) {
         let returnValue = [];
         let loopThrough = 1;
         if (card.constructor !== Object) loopThrough = card.length;
+        if (typeof card === "string") loopThrough = 1;
         for (let i = 0; i < loopThrough; i++) {
             let currentCard;
-            card.constructor === Object ? currentCard = card : currentCard = card[i];
-            currentCard = this.repair(currentCard);
-            // https://www.htmlsymbols.xyz/games-symbols/playing-cards
-            let n = 127136;
-            if (currentCard.r !== "JOKER") {
-                if (["Q", "K"].includes(currentCard.r)) n++;
-                switch(currentCard.s) {
-                    case "H":
-                        n += 16;
-                        break;
-                    case "D":
-                        n += 32;
-                        break;
-                    case "C":
-                        n += 48;
-                        break;
-                }
-                n += this.numeric(currentCard.r, false);
+            if (card.constructor === Object) {
+                currentCard = card
             }else {
-                n = 127167;
+                if (typeof card === "object") {
+                    currentCard = card[i];
+                }else {
+                    currentCard = "back";
+                };
             };
-            let svg = 
-            `<?xml version="1.0" encoding="utf-8"?>
-            <svg style="width: 163.5px; height: 245px; background-color: white;" xmlns="http://www.w3.org/2000/svg">
-                <text y="210px" style="font-size: 250px;" fill="` + currentCard.c + `">` + "&#" + n + ";" + `</text>
-            </svg>`;
-            returnValue.push("<img style='width: 163.5px; height: 245px; border: 2px solid " + currentCard.c + ";' src='data:image/svg+xml;base64," + btoa(svg) + "'>");
-            // return svg;
+            if (currentCard !== "back") {
+                currentCard = this.repair(currentCard);
+                // https://www.htmlsymbols.xyz/games-symbols/playing-cards
+                let n = 127136;
+                if (currentCard.r !== "JOKER") {
+                    if (["Q", "K"].includes(currentCard.r)) n++;
+                    switch(currentCard.s) {
+                        case "H":
+                            n += 16;
+                            break;
+                        case "D":
+                            n += 32;
+                            break;
+                        case "C":
+                            n += 48;
+                            break;
+                    }
+                    n += this.numeric(currentCard.r, false);
+                }else {
+                    n = 127167;
+                };
+                if (entity)  n = "&#" + n + ";";
+                returnValue.push({n:n,c:currentCard.c});
+            }else {
+                let n = 127136;
+                if (entity)  n = "&#" + n + ";";
+                returnValue.push({n:n,c:"red"});
+            };
         };
-        if (card.constructor === Object) {return returnValue[0]} else {return returnValue} ;
+        if ((card.constructor === Object) || (typeof card === "string")) {return returnValue[0]} else {return returnValue} ;
+    },
+    charCard: function(n, forceColor=false) {
+        let returnArray = (typeof n === "object");
+        const returnValue = [];
+        if (typeof n !== "object") n = [n];
+        for (let i = 0; i < n.length; i++) {
+            n[i] = Number(n[i]);
+            returnValue.push({});
+            if (n[i] !== 127167) {
+                let sub;
+                if ((n[i] >= 127137) && (n[i] <= 127150)) {
+                    returnValue[i].s = "S";
+                    sub = 127137;
+                };
+                if ((n[i] >= 127153) && (n[i] <= 127166)) {
+                    returnValue[i].s = "H";
+                    sub = 127153;
+                };
+                if ((n[i] >= 127169) && (n[i] <= 127182)) {
+                    returnValue[i].s = "D";
+                    sub = 127169;
+                };
+                if ((n[i] >= 127185) && (n[i] <= 127198)) {
+                    returnValue[i].s = "C";
+                    sub = 127185;
+                };
+                if (n[i] - sub === 12 || n[i] - sub === 13) sub++;
+                returnValue[i].r = this.ranks[n[i] - sub];
+                returnValue[i] = this.repair(returnValue[i]);
+            }else {
+                returnValue[i] = {r:"JOKER"};
+            };
+
+            if (forceColor !== false) {
+                returnValue[i].c = forceColor;
+            };
+        };
+        if (returnArray) {return returnValue} else {return returnValue[0]};
     },
 };
