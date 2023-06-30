@@ -70,4 +70,15 @@ console.log( cards.unNumeric(15) ); //"JOKER"
 console.log( cards.unNumeric(14, false) ); //"JOKER"
 ```
 ## Cards as characters
-There is a character pertaining to each playing card. You can view a full list [here](https://www.htmlsymbols.xyz/games-symbols/playing-cards).
+There is a character pertaining to each playing card. You can view a full list [here](https://www.htmlsymbols.xyz/games-symbols/playing-cards). To show a card as a charater, use `cards.char(card)`.
+```js
+let cardCharacter = cards.char( {r:"K", s:"H", c:"red"} );
+console.log( cardCharacter.n ); //"&#127166;"
+console.log( cardCharacter.c ); //"red"
+```
+Or, specify that `card.n` should be in number form:
+```js
+let cardCharacter = cards.char( {r:"K", s:"H", c:"red"}, false);
+console.log( cardCharacter.n ); //"&#127166;"
+console.log( cardCharacter.c ); //"red"
+```
