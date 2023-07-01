@@ -98,5 +98,7 @@ To convert the characters back into cards, use `cards.charCard(n)`.
 console.log( cards.charCard(127166) ); //{r:"K", s:"H", c:"red"}
 console.log( cards.charCard(127136) ); //"back"
 ```
+## License
+Distributed under the MIT License. See LICENSE.txt for more information.
 ## Acknowledgements
 * [https://www.htmlsymbols.xyz/games-symbols/playing-cards](https://www.htmlsymbols.xyz/games-symbols/playing-cards)
