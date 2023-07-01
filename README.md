@@ -7,7 +7,7 @@ In your HTML file, add a `script` element linked to the `cards.js` file.
 ```html
 <script src="cards.js"></script>
 <!-- or -->
-<script src="URL"></script>
+<script src="https://raw.githubusercontent.com/the-web-crawler/JavaScript-Playing-Cards/main/cards.js"></script>
 ```
 ## Card Syntax
 Each card is a plain object with three properties: `r` (rank), `s` (suit), and `c` (color). Jokers lack the `s` property.
