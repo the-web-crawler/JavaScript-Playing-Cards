@@ -25,7 +25,7 @@ const j = {
   c:"black",
 };
 ```
-## Creating a deck of cards
+## Creating a Deck of Cards
 To create a standard deck of cards, use `cards.makeDeck()`. To create a 54 card deck with jokers, use `cards.makeDeck(true)`.
 ``` js
 const myStandardDeck = cards.makeDeck(); // create array of card objects
@@ -34,9 +34,9 @@ console.log(myStandardDeck[0]); // {r: "A", s: "H", c: "red"}
 const myDeck = cards.makeDeck(true); // create array of card objects with jokers at the end
 console.log(myDeck[53]); // {r: "JOKER", c: "black"}
 ```
-## Shuffling cards
+## Shuffling Cards
 Use `cards.shuffle(deck)` to return an array of cards in randomized order. Note that the deck to be shuffled does not have to be full, and can also include duplicates of the same card.
-## Drawing cards
+## Drawing Cards
 Use `cards.draw(deck)` to draw the "top" card of the deck. The return value is an object with two properties: `card`, which is the card that was at the end of the array, and `deck`, which is the original deck missing the card drawn. Note that this method changes the original array.
 ``` js
 let cardDeck = cards.makeDeck(true);
@@ -46,7 +46,7 @@ playerHand.push(drawn.card); //add the drawn card to the player's hand
 
 console.log(cardDeck === drawn.deck); //true
 ```
-## Deal cards to multiple players
+## Deal Cards to Multiple Players
 The `deal(deck, players, amount="imperfect")` method takes three parameters. The first is the deck of cards to draw from. The second is the amount of players to deal to. The third is the amount of cards to deal. Alternatively, the amount can be "imperfect", which deals the entire deck, or "perfect", which deals as much of the deck as possible while keeping the number of cards in each hand the same. Here's how to deal 7 cards to 4 players:
 ```js
 let cardDeck = cards.makeDeck(true);
@@ -55,7 +55,7 @@ let playerHands = dealt.hands; //this is an array of arrays (list of players' ha
 
 console.log(cardDeck === dealt.deck); //true
 ```
-## Measuring ranks
+## Measuring Ranks
 Often times one will need to have the rank as a number value. The methods `numeric` and `unNumeric` will do this. Aces can be high or low, which can be specified. Note that when ace is high, it is greater than king but less than joker. Here is `cards.numeric()`:
 ```js
 //syntax: cards.numeric(rank, aceHigh=true);
@@ -76,7 +76,7 @@ console.log( cards.unNumeric(1, false) ); //"A"
 console.log( cards.unNumeric(15) ); //"JOKER"
 console.log( cards.unNumeric(14, false) ); //"JOKER"
 ```
-## Cards as characters
+## Cards as Characters
 There is a character pertaining to each playing card. You can view a full list [here](https://www.htmlsymbols.xyz/games-symbols/playing-cards). To show a card as a charater, use `cards.char(card)`. The parameter `card` can be a card object, the string `"back"` (which returns the playing card back character with the color red), or an array of these.
 ```js
 let cardCharacter = cards.char( {r:"K", s:"H", c:"red"} );
@@ -99,6 +99,6 @@ console.log( cards.charCard(127166) ); //{r:"K", s:"H", c:"red"}
 console.log( cards.charCard(127136) ); //"back"
 ```
 ## License
-Distributed under the MIT License. See LICENSE.txt for more information.
+Distributed under the MIT License. See [LICENSE.txt](LICENSE.txt) for more information.
 ## Acknowledgements
 * [https://www.htmlsymbols.xyz/games-symbols/playing-cards](https://www.htmlsymbols.xyz/games-symbols/playing-cards)
